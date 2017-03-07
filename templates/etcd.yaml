@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ndslabs-etcd
+spec:
+  ports:
+  - name: etcd-client-port
+    port: 4001
+    protocol: TCP
+    targetPort: 4001
+  selector:
+    app: ndslabs-etcd
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: ndslabs-etcd
+    etcd_node: ndslabs-etcd
+  name: ndslabs-etcd
+spec:
+  hostNetwork: true
+  containers:
+  - command: 
+    - /usr/local/bin/etcd
+    - --bind-addr=0.0.0.0:4001
+    - --advertise-client-urls=http://127.0.0.1:4001
+    - --data-dir=/var/etcd/data
+    image: gcr.io/google_containers/etcd-amd64:2.2.5
+    name: ndslabs-etcd
+    ports:
+    - containerPort: 4001
+      name: server
+      protocol: TCP
+    volumeMounts: 
+    - name: varetcd
+      mountPath: /var/etcd
+  restartPolicy: Never
+  volumes:
+  - name: varetcd
+    emptyDir: {}
