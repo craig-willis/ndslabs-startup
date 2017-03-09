@@ -1,0 +1,27 @@
+curl -L https://aka.ms/InstallAzureCli | bash
+az login
+az group create -n acsrg1 -l "westus"
+az acs create --orchestrator-type=kubernetes --resource-group acsrg1 --name=ndslabs --dns-prefix=ndslabs --agent-vm-size=Standard_D1_v2 --master-count=1 --agent-count=1
+az acs kubernetes install-cli
+az acs kubernetes get-credentials --resource-group acsrg1 --name=ndslabs 
+kubectl get nodes
+kubectl run nginx --image nginx
+kubectl expose deployments nginx --port=80 --type=LoadBalancer
+kubectl delete svc,deployment nginx
+vi loadbalancer.yaml 
+kubectl create -f loadbalancer.yaml 
+kubectl get svc
+kubectl delete svc nginx
+kubectl get rc
+kubectl expose rc nginx-ilb-rc --port=80 --type=LoadBalancer
+kubectl get svc
+kubectl create -f default-backend.yaml 
+kubectl create -f default-ingress.yaml 
+kubectl create -f etcd.yaml 
+kubectl create -f apiserver.yaml 
+kubectl create -f webui.yaml 
+kubectl logs ndslabs-apiserver-bmc8h
+kubectl delete -f apiserver.yaml 
+kubectl label nodes k8s-agent-5133fb85-0 ndslabs-node-role=compute
+kubectl logs ndslabs-apiserver-qkcgj
+kubectl proxy

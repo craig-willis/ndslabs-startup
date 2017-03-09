@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bind
+spec:
+  ports:
+  - name: bind1
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  - name: bind2
+    port: 10000
+    protocol: TCP
+    targetPort: 10000
+  selector:
+    app: bind
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: bind
+  name: bind
+spec:
+  hostNetwork: true
+  containers:
+  - image: sameersbn/bind:latest
+    name: bind
+    env:
+    - name: ROOT_PASSWORD
+      value: "SecretPassword"
+    ports:
+    - containerPort: 53
+      name: bind1
+      protocol: UDP
+    - containerPort: 1000
+      name: bind2
+      protocol: TCP
+    volumeMounts: 
+    - name: data
+      mountPath: /data
+  restartPolicy: Never
+  volumes:
+  - name: data
+    emptyDir: {}
