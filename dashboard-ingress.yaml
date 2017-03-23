@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/auth-signin: https://www.mldev.ndslabs.org/oauth2/sign_in
+    ingress.kubernetes.io/auth-url: https://www.mldev.ndslabs.org/oauth2/auth
+  name: external-auth-oauth2
+  namespace: kube-system
+spec:
+  rules:
+  - host: dashboard.mldev.ndslabs.org
+    http:
+      paths:
+      - backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+        path: /
+  tls:
+  - hosts:
+    - dashboard.mldev.ndslabs.org
+    secretName: ndslabs-tls-secret
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: oauth2-proxy
+  namespace: kube-system
+spec:
+  rules:
+  - host: www.mldev.ndslabs.org
+    http:
+      paths:
+      - backend:
+          serviceName: oauth2-proxy
+          servicePort: 4180
+        path: /oauth2
+  tls:
+  - hosts:
+    - www.mldev.ndslabs.org
+    secretName: ndslabs-tls-secret
