@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export K8S_VERSION=1.5.1
 
@@ -21,7 +21,6 @@ echo 'Starting Hyperkube Kubelet...'
     --volume=/:/rootfs:ro \
     --volume=/sys:/sys:ro \
     --volume=/var/lib/docker/:/var/lib/docker:rw \
-    --volume=/var/lib/kubelet/:/var/lib/kubelet:rw,rslave \
     --volume=/var/run:/var/run:rw \
     --volume=`pwd`/manifests:/etc/kubernetes/manifests \
     --net=host \
@@ -40,3 +39,5 @@ echo 'Starting Hyperkube Kubelet...'
     || (echo '' && echo 'Starting previous Kubelet...' && docker start kubelet)) && echo 'Kubelet started successfully!'
 echo ''
 echo 'Kubernetes is starting!'
+
+#    --volume=/var/lib/kubelet/:/var/lib/kubelet:rw,rslave \
