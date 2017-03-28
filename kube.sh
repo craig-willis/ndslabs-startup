@@ -117,7 +117,7 @@ if [ ! -d "$BINDIR" ]; then
 
     # TODO: Need an elegant way to add bins to PATH programmatically
     export PATH="$BINDIR:$PATH"
-    $ECHO "Be sure to execute 'export PATH=$BINDIR:\$PATH' to add the directory contaning kubectl to your PATH."
+    $ECHO "\nBe sure to execute 'export PATH=$BINDIR:\$PATH' to add the directory contaning kubectl to your PATH.\n"
 fi
 
 # Wait for Kubernetes to start
