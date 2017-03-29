@@ -32,8 +32,8 @@ function start_all() {
 
     $ECHO '\nStarting Labs Workbench core services...'
     # Pre-process jinja-style variables by piping through sed
-    cat templates/core/loadbalancer.yaml | sed -e "s#{{\s*DOMAIN\s*}}#$DOMAIN#g" | kubectl create -f -
-    $BINDIR/kubectl create -f templates/oauth2-proxy.yaml -f templates/smtp/ -f templates/core/svc.yaml -f templates/core/etcd.yaml -f templates/core/apiserver.yaml
+    cat templates/core/loadbalancer.yaml | sed -e "s#{{\s*DOMAIN\s*}}#$DOMAIN#g" | $BINDIR/kubectl create -f -
+    $BINDIR/kubectl create -f templates/core/oauth2-proxy.yaml -f templates/smtp/ -f templates/core/svc.yaml -f templates/core/etcd.yaml -f templates/core/apiserver.yaml
 
     # Label this as compute node, so that the ndslabs-apiserver can schedule pods here
     $BINDIR/kubectl label nodes 127.0.0.1 ndslabs-node-role=compute
