@@ -22,6 +22,27 @@ spec:
         backend:
           serviceName: ndslabs-webui
           servicePort: 80
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: oauth2-proxy
+spec:
+  rules:
+  - host: www.{{ DOMAIN }}
+    http:
+      paths:
+      - backend:
+          serviceName: oauth2-proxy
+          servicePort: 4180
+        path: /oauth2
+  tls:
+  - hosts:
+    - www.{{ DOMAIN }}
+    secretName: ndslabs-tls-secret
+
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
