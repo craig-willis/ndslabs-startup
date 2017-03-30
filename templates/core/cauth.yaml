@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: cauth
+  name: cauth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: cauth
+  template:
+    metadata:
+      labels:
+        k8s-app: cauth
+    spec:
+      containers:
+      - image: craigwillis/login
+        imagePullPolicy: Always
+        name: cauth
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: cauth
+  name: cauth
+spec:
+  ports:
+  - name: http
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    k8s-app: cauth
