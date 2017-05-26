@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: terra-bety
+  labels:
+    component: terra-bety
+spec:
+  selector:
+    component: terra-bety
+  ports:
+    - port: 5432
+      protocol: TCP
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: terra-bety
+spec:
+  replicas: 1
+  selector:
+    component: terra-bety
+  template:
+    metadata:
+      labels:
+        component: terra-bety
+    spec:
+      containers:
+      - name: terra-bety
+        image: craigwillis/bety-postgis
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+          - name: data
+            mountPath: "/var/lib/postgresql/data"
+        env:
+          - name: POSTGRES_DB
+            value: "bety"
+      volumes:
+       - hostPath:
+            path: "/ndslabs/bety/"
+         name: data

@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: ndslabs-webui
-        image: ndslabs/angular-ui:1.0.9
+        image: ndslabs/angular-ui:1.0.10
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -42,11 +42,11 @@ spec:
           - name: APISERVER_SECURE
             value: "false"
           - name: ANALYTICS_ACCOUNT
-            value: ""
+            value: "UA-65745047-2"
           - name: SUPPORT_EMAIL
-            value: "willis8@illinois.edu"
+            value: "terraref-support@lists.illinois.edu"
           - name: GIT_DROPIN_REPO
-            value: "https://github.com/craig-willis/ndslabs"
+            value: "https://github.com/nds-org/ndslabs"
           - name: GIT_DROPIN_BRANCH
             value: "terra"
         readinessProbe:

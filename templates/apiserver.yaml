@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: ndslabs-apiserver
-        image: ndslabs/apiserver:1.0.9
+        image: ndslabs/apiserver:1.0.10
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -38,13 +38,13 @@ spec:
             mountPath: "/ndslabs/home"
         env:
           - name: ETCD_ADDR
-            value: "192.168.5.73:4001"
+            value: "192.168.5.76:4001"
           - name: KUBERNETES_ADDR
-            value: "https://192.168.5.73:6443"
+            value: "https://192.168.5.76:6443"
           - name: CORS_ORIGIN_ADDR
             value: "http://www.terraref.ndslabs.org"
           - name: SPEC_GIT_REPO
-            value: "https://github.com/craig-willis/ndslabs-specs.git"
+            value: "https://github.com/nds-org/ndslabs-specs.git"
           - name: SPEC_GIT_BRANCH
             value: "terra-ref"
           - name: INGRESS
@@ -56,15 +56,19 @@ spec:
           - name: VOLUME_NAME
             value: "global"
           - name: SUPPORT_EMAIL
-            value: "willis8@illinois.edu"
+            value: "terraref-support@lists.illinois.edu"
           - name: REQUIRE_APPROVAL
-            value: "false"
+            value: "true"
           - name: SERVICE_TIMEOUT
             value: "10"
           - name: SHARED_VOLUME_PATH
             value: "/data/terraref/sites"
           - name: SHARED_VOLUME_NAME
             value: "terraref"
+          - name: WORKBENCH_NAME
+            value: "TERRA-REF Analysis Workbench"
+          - name: SUPPORT_CHAT
+            value: "https://terra-ref.slack.com/"
       volumes:
        - hostPath:
             path: "/ndslabs/home/"
