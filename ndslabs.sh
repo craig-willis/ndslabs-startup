@@ -60,7 +60,11 @@ function start_all() {
 
   # Pre-process jinja-style variables by piping through sed
   cat templates/core/loadbalancer.yaml | sed -e "s#{{[ \s]*DOMAIN[ \s]*}}#$DOMAIN#g" | $KUBECTL_BIN create -f -
-  $KUBECTL_BIN create -f templates/smtp/ -f templates/core/svc.yaml -f templates/core/etcd.yaml -f templates/core/apiserver.yaml
+  $KUBECTL_BIN create -f templates/smtp/ -f templates/core/svc.yaml -f templates/core/etcd.yaml -f templates/core/apiserver.yaml -f templates/core/oauth2-proxy.yaml
+
+  # Create custom nginx template configmap
+  $KUBECTL_BIN create configmap nginx-template --from-file=nginx.tmpl=templates/ingress-nginx/nginx.tmpl
+
 
   # Only start bind if requested
   if [ "$3" == YES ]; then
