@@ -36,7 +36,7 @@ echo "KUBECTL $KUBECTL_BIN"
 # $3 == Flag whether to start our own bind service
 function start_all() {
   # Ensure that Kubernetes is running
-  $KUBECTL_BIN create -f templates/config.yaml >/dev/null 2>&1
+  $KUBECTL_BIN apply -f templates/config.yaml >/dev/null 2>&1
 
   # Grab our DOMAIN from the configmap
   DOMAIN="$(cat templates/config.yaml | grep domain | awk '{print $2}' | sed s/\"//g)"
@@ -54,7 +54,6 @@ function start_all() {
   # Create secret from TLS certs
   $ECHO '\nGenerating Labs Workbench TLS Secret...'
   $KUBECTL_BIN create secret generic ndslabs-tls-secret --from-file=tls.crt="certs/${DOMAIN}.cert" --from-file=tls.key="certs/${DOMAIN}.key" --namespace=default
-  $KUBECTL_BIN create secret generic ndslabs-tls-secret --from-file=tls.crt="certs/${DOMAIN}.cert" --from-file=tls.key="certs/${DOMAIN}.key" --namespace=kube-system
 
   $ECHO '\nStarting Labs Workbench core services...'
 
@@ -65,10 +64,9 @@ function start_all() {
   # Create custom nginx template configmap
   $KUBECTL_BIN create configmap nginx-template --from-file=nginx.tmpl=templates/ingress-nginx/nginx.tmpl
 
-
   # Only start bind if requested
   if [ "$3" == YES ]; then
-    $KUBECTL_BIN create -f templates/core/bind.yaml
+    $KUBECTL_BIN apply -f templates/core/bind.yaml
   fi
 
   # Label this as compute node, so that the ndslabs-apiserver can schedule pods here
@@ -78,12 +76,12 @@ function start_all() {
   # Don't start the ui if not required by user
   if [ "$2" == YES ]; then
     $ECHO '\nStarting Labs Workbench UI...'
-    $KUBECTL_BIN create -f templates/core/webui.yaml
+    $KUBECTL_BIN apply -f templates/core/webui.yaml
   fi
 
   # TODO: Add support/options for LMA stuff
   # $ECHO '\nStarting Labs Workbench LMA tools...'
-  # $KUBECTL_BIN create -f templates/lma/nagios-nrpe-ds.yaml
+  # $KUBECTL_BIN apply -f templates/lma/nagios-nrpe-ds.yaml
 
   # Wait for the API server to start
   $ECHO '\nWaiting for Labs Workbench API server to start...'
