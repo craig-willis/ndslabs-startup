@@ -48,3 +48,10 @@ data:
   smtp.smarthost_port: ""
   smtp.smarthost_user: ""
   smtp.smarthost_password: ""
+  
+  # Oauth2: Setup via https://developers.globus.org/
+  oauth2_proxy.provider: globus
+  oauth2_proxy.client_id: ""
+  oauth2_proxy.client_secret: ""
+  # date +%s | sha256sum | base64 | head -c 32
+  oauth2_proxy.cookie_secret: ""
